@@ -170,7 +170,7 @@ function App() {
         }}>
           Inspired by <a href="https://github.com/yoavbls/web-chaos-graph" target="_blank" rel="noopener noreferrer" style={{ color: '#0070f3' }}>yoavbls/web-chaos-graph</a> &nbsp;|&nbsp;
           Vibe coded by <a href="https://github.com/HerringtonDarkholme/" target="_blank" rel="noopener noreferrer" style={{ color: '#f81ce5' }}>@HerringtonDarkholme</a> &nbsp;|&nbsp;
-          If you like this, please give <a href="https://github.com/ast-grep/ast-grep" target="_blank" rel="noopener noreferrer" style={{ color: '#ffd93d' }}>ast-grep</a> a star!
+          If you like this, please give <a href="https://github.com/ast-grep/ast-grep" target="_blank" style={{ color: '#dbb726' }}>ast-grep</a> a star!
         </span>
       </div>
     </div>

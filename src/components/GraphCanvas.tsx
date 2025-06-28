@@ -198,7 +198,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   }, [width, height]);
 
   // Find hovered node and its relationships
-  const hoveredTool = hoveredNode ? nodes.find(n => n.id === hoveredNode) : null;
+  const hoveredTool = nodes.find(n => n.id === hoveredNode) ?? null;
   const hoveredEdges = hoveredTool ? edges.filter(e => e.source === hoveredTool.id || e.target === hoveredTool.id) : [];
 
   // Default sidebar content when no tool is hovered

@@ -28,7 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefaul
         color: 'var(--text-primary)'
       }}>
         <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 8 }}>Web Tools Dependency Graph</div>
-        <div style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 18 }}>
+        <div style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 18, textWrap: 'pretty' }}>
           Explore the relationships between modern web development tools. Hover over a node to see details and connections.
         </div>
         <div style={{ fontWeight: 600, fontSize: 15, marginBottom: 6 }}>How to use</div>
