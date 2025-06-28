@@ -127,6 +127,10 @@ button:focus-visible {
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 400ms ease;
+
+  --edge-color: rgba(255,255,255,0.15);
+  --edge-hover-color: rgba(255,255,255,0.6);
+  --edge-highlight-color: #0070f3;
 }
 
 body.light, :root.light {
@@ -148,6 +152,9 @@ body.light, :root.light {
   --accent-yellow: #ffd93d;
   --accent-green: #6bcf7f;
   --accent-red: #ff4757;
+  --edge-color: rgba(60,60,60,0.25);
+  --edge-hover-color: rgba(60,60,60,0.6);
+  --edge-highlight-color: #0070f3;
 }
 
 .app {

@@ -28,11 +28,12 @@ export const EdgeComponent: React.FC<EdgeProps> = ({
     return `M ${sourcePosition.x} ${sourcePosition.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${targetPosition.x} ${targetPosition.y}`;
   };
 
+  // Use CSS variables for edge colors to support both themes
   const strokeColor = isHighlighted 
-    ? '#0070f3' 
+    ? 'var(--edge-highlight-color, #0070f3)'
     : isHovered 
-      ? 'rgba(255, 255, 255, 0.6)' 
-      : 'rgba(255, 255, 255, 0.15)';
+      ? 'var(--edge-hover-color, rgba(60,60,60,0.6))' 
+      : 'var(--edge-color, rgba(60,60,60,0.25))';
   
   const strokeWidth = isHighlighted ? 2.5 : isHovered ? 1.5 : 1;
   const opacity = isHighlighted || isHovered ? 1 : 0.4;

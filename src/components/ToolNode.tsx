@@ -115,7 +115,7 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         textAlign: 'center',
         lineHeight: '1.2',
         fontSize: '12px',
-        color: '#ffffff'
+        color: 'var(--text-primary)'
       }}>
         {node.name}
       </div>
@@ -125,7 +125,7 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         fontSize: '9px', 
         opacity: 0.7,
         textAlign: 'center',
-        color: node.category.color,
+        color: 'var(--text-secondary)',
         fontWeight: '500'
       }}>
         {node.category.name}
