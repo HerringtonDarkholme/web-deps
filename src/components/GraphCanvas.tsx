@@ -171,6 +171,23 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   });
   const normalEdges = visibleEdges.filter(edge => !highlightedEdges.includes(edge));
 
+  // Center the graph on initial load
+  useEffect(() => {
+    // Only center if at initial state
+    if (viewport.translateX === 0 && viewport.translateY === 0) {
+      const canvasWidth = 2000;
+      const canvasHeight = 1400;
+      const initialScale = 0.5;
+      const centerX = (width - canvasWidth * initialScale) / 2;
+      const centerY = (height - canvasHeight * initialScale) / 2;
+      setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
+      x.set(centerX);
+      y.set(centerY);
+      scale.set(initialScale);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width, height]);
+
   return (
     <div
       ref={containerRef}
