@@ -65,7 +65,7 @@ export const tools: Tool[] = [
   { name: 'React Compiler', category: 'compiler', logo: '/logos/react-compiler.svg' },
   { name: 'ts-node', category: 'compiler', logo: '/logos/ts-node.svg' },
   { name: 'Acorn', category: 'parser', logo: '/logos/acorn.svg' },
-  { name: 'OXC', category: 'parser', logo: '/logos/oxc.svg' },
+  { name: 'OXC', category: 'compiler', logo: '/logos/oxc.svg' },
   { name: 'Deno', category: 'runtime', logo: '/logos/deno.svg' },
   { name: 'Bun', category: 'runtime', logo: '/logos/bun.svg' },
 ].map(tool => {
