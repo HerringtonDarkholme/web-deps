@@ -16,114 +16,67 @@ export const categories: ToolCategory[] = [
   { id: 'language-tool', name: 'Language Tool', level: 3, color: '#00d2d3' },
 ];
 
-function normalizeName(str: string) {
-  return str.toLowerCase().replace(/\s|\//g, '');
-}
-
-// Helper function to categorize tools based on their name and common patterns
-function categorizeTool(toolName: string): ToolCategory {
-  const name = normalizeName(toolName);
-
-  // Meta frameworks
-  if ([
-    'next.js', 'nuxt', 'remix', 'sveltekit', 'svelte / kit', 'qwik city',
-    'solidstart', 'tanstack start', 'analog', 'fresh'
-  ].some(mf => name.includes(normalizeName(mf)))) {
-    return categories.find(c => c.id === 'metaframework') || categories[2];
-  }
-
-  // Frameworks (Mitosis, Gatsby, Docusaurus, Nitro, UnJS libs, Unplugin, React Router, Astro / Starlight)
-  if ([
-    'mitosis', 'gatsby', 'docusaurus', 'nitro', 'unjs libs', 'unplugin', 'react router', 'astro / starlight'
-  ].some(fw => name.includes(normalizeName(fw)))) {
-    return categories.find(c => c.id === 'framework') || categories[2];
-  }
-
-  // Compilers (including React Compiler)
-  if ([
-    'swc', 'babel', 'tsc', 'react compiler', 'ts-node'
-  ].some(comp => name.includes(normalizeName(comp)))) {
-    return categories.find(c => c.id === 'compiler') || categories[2];
-  }
-
-  // Libraries (React, Preact, Angular, Vue.js, Svelte, Solid.js, LIT, Alpine, etc.)
-  if ([
-    'react', 'preact', 'angular', 'vue.js', 'svelte', 'solid.js', 'lit', 'alpine'
-  ].some(lib => name.includes(normalizeName(lib)))) {
-    return categories.find(c => c.id === 'library') || categories[2];
-  }
-
-  // Bundlers
-  if ([
-    'vite', 'webpack', 'parcel', 'rollup', 'rolldown', 'turbopack', 'rspack', 'farm', 'esbuild'
-  ].map(normalizeName).includes(name)) {
-    return categories.find(c => c.id === 'bundler') || categories[2];
-  }
-
-  // Runtimes
-  if ([
-    'deno', 'bun', 'node.js'
-  ].map(normalizeName).includes(name)) {
-    return categories.find(c => c.id === 'runtime') || categories[2];
-  }
-
-  // Parsers
-  if ([
-    'acorn', 'oxc'
-  ].map(normalizeName).includes(name)) {
-    return categories.find(c => c.id === 'parser') || categories[2];
-  }
-
-  // Linters
-  if ([
-    'eslint', 'oxlint', 'biome'
-  ].map(normalizeName).includes(name)) {
-    return categories.find(c => c.id === 'linter') || categories[2];
-  }
-
-  // Formatters
-  if ([
-    'prettier'
-  ].map(normalizeName).includes(name)) {
-    return categories.find(c => c.id === 'formatter') || categories[2];
-  }
-
-  // Minimizers
-  if ([
-    'terser'
-  ].map(normalizeName).includes(name)) {
-    return categories.find(c => c.id === 'minimizer') || categories[2];
-  }
-
-  // Testing
-  if ([
-    'vitest'
-  ].map(normalizeName).includes(name)) {
-    return categories.find(c => c.id === 'testing') || categories[2];
-  }
-
-  // Language tools
-  if ([
-    'volar.js'
-  ].map(normalizeName).includes(name)) {
-    return categories.find(c => c.id === 'language-tool') || categories[2];
-  }
-
-  // Default to library
-  return categories.find(c => c.id === 'library') || categories[2];
-}
-
-// Raw tool data from the user
-const rawTools = [
-  'TanStack Start', 'SolidStart', 'Solid.js', 'LIT', 'Alpine', 'Qwik', 'Qwik City',
-  'Analog', 'Angular', 'Nuxt', 'Vue.js', 'Astro / Starlight', 'Svelte', 'SvelteKit',
-  'Preact', 'Remix', 'React Router', 'React', 'Next.js', 'Docusaurus',
-  'Gatsby', 'Fresh', 'Mitosis', 'Volar.js', 'Nitro', 'UnJS libs',
-  'Vitest', 'Vite', 'Parcel', 'Turbopack', 'Webpack',
-  'Rspack', 'Farm', 'Deno', 'Bun', 'esbuild', 'Rollup', 'Rolldown',
-  'Unplugin', 'Biome', 'Prettier', 'React Compiler', 'ESLint', 'ts-node',
-  'Terser', 'Babel', 'Acorn', 'tsc', 'SWC', 'OXC', 'Oxlint'
-];
+export const tools: Tool[] = [
+  { name: 'TanStack Start', category: 'metaframework', logo: '/logos/tanstack-start.svg' },
+  { name: 'SolidStart', category: 'metaframework', logo: '/logos/solidstart.svg' },
+  { name: 'SvelteKit', category: 'metaframework', logo: '/logos/sveltekit.svg' },
+  { name: 'Qwik City', category: 'metaframework', logo: '/logos/qwik-city.svg' },
+  { name: 'Next.js', category: 'metaframework', logo: '/logos/nextjs.svg' },
+  { name: 'Nuxt', category: 'metaframework', logo: '/logos/nuxt.svg' },
+  { name: 'Remix', category: 'metaframework', logo: '/logos/remix.svg' },
+  { name: 'Analog', category: 'metaframework', logo: '/logos/analog.svg' },
+  { name: 'Astro / Starlight', category: 'framework', logo: '/logos/astro.svg' },
+  { name: 'Mitosis', category: 'framework', logo: '/logos/mitosis.svg' },
+  { name: 'Gatsby', category: 'framework', logo: '/logos/gatsby.svg' },
+  { name: 'Docusaurus', category: 'framework', logo: '/logos/docusaurus.svg' },
+  { name: 'Nitro', category: 'framework', logo: '/logos/nitro.svg' },
+  { name: 'UnJS libs', category: 'framework', logo: '/logos/unjs.svg' },
+  { name: 'Unplugin', category: 'framework', logo: '/logos/unplugin.svg' },
+  { name: 'React Router', category: 'framework', logo: '/logos/react-router.svg' },
+  { name: 'Preact', category: 'library', logo: '/logos/preact.svg' },
+  { name: 'React', category: 'library', logo: '/logos/react.svg' },
+  { name: 'Angular', category: 'library', logo: '/logos/angular.svg' },
+  { name: 'Vue.js', category: 'library', logo: '/logos/vue.svg' },
+  { name: 'Svelte', category: 'library', logo: '/logos/svelte.svg' },
+  { name: 'Qwik', category: 'library', logo: '/logos/qwik.svg' },
+  { name: 'Solid.js', category: 'library', logo: '/logos/solid.svg' },
+  { name: 'LIT', category: 'library', logo: '/logos/lit.svg' },
+  { name: 'Alpine', category: 'library', logo: '/logos/alpine.svg' },
+  { name: 'Fresh', category: 'framework', logo: '/logos/fresh.svg' },
+  { name: 'Volar.js', category: 'language-tool', logo: '/logos/volar.svg' },
+  { name: 'Vitest', category: 'testing', logo: '/logos/vitest.svg' },
+  { name: 'Vite', category: 'bundler', logo: '/logos/vite.svg' },
+  { name: 'Parcel', category: 'bundler', logo: '/logos/parcel.svg' },
+  { name: 'Turbopack', category: 'bundler', logo: '/logos/turbopack.svg' },
+  { name: 'Webpack', category: 'bundler', logo: '/logos/webpack.svg' },
+  { name: 'Rspack', category: 'bundler', logo: '/logos/rspack.svg' },
+  { name: 'Farm', category: 'bundler', logo: '/logos/farm.svg' },
+  { name: 'esbuild', category: 'bundler', logo: '/logos/esbuild.svg' },
+  { name: 'Rollup', category: 'bundler', logo: '/logos/rollup.svg' },
+  { name: 'Rolldown', category: 'bundler', logo: '/logos/rolldown.svg' },
+  { name: 'Biome', category: 'linter', logo: '/logos/biome.svg' },
+  { name: 'ESLint', category: 'linter', logo: '/logos/eslint.svg' },
+  { name: 'Oxlint', category: 'linter', logo: '/logos/oxlint.svg' },
+  { name: 'Prettier', category: 'formatter', logo: '/logos/prettier.svg' },
+  { name: 'Terser', category: 'minimizer', logo: '/logos/terser.svg' },
+  { name: 'SWC', category: 'compiler', logo: '/logos/swc.svg' },
+  { name: 'Babel', category: 'compiler', logo: '/logos/babel.svg' },
+  { name: 'tsc', category: 'compiler', logo: '/logos/tsc.svg' },
+  { name: 'React Compiler', category: 'compiler', logo: '/logos/react-compiler.svg' },
+  { name: 'ts-node', category: 'compiler', logo: '/logos/ts-node.svg' },
+  { name: 'Acorn', category: 'parser', logo: '/logos/acorn.svg' },
+  { name: 'OXC', category: 'parser', logo: '/logos/oxc.svg' },
+  { name: 'Deno', category: 'runtime', logo: '/logos/deno.svg' },
+  { name: 'Bun', category: 'runtime', logo: '/logos/bun.svg' },
+].map(tool => {
+  const cat = categories.find(c => c.id === tool.category)!;
+  return {
+    ...tool,
+    id: tool.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    category: cat,
+    level: cat.level
+  };
+});
 
 // Raw edge data from the user
 const rawEdges = [
@@ -223,17 +176,6 @@ const rawEdges = [
 ];
 
 // Transform raw data to typed structures
-export const tools: Tool[] = rawTools.map((toolName) => {
-  const category = categorizeTool(toolName);
-  return {
-    id: toolName.toLowerCase().replace(/[^a-z0-9]/g, '-'),
-    name: toolName,
-    category,
-    level: category.level,
-    logo: `/logos/${toolName.toLowerCase().replace(/[^a-z0-9]/g, '-')}.svg`
-  };
-});
-
 export const edges: Edge[] = rawEdges.filter(e => e.source !== 'rolldown-vite package' && e.target !== 'rolldown-vite package').map((edge, index) => ({
   id: `edge-${index}`,
   source: edge.source.toLowerCase().replace(/[^a-z0-9]/g, '-'),
