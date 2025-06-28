@@ -189,8 +189,8 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
         initialScale: 0.5
       });
       // Offset by sidebar width so the graph is centered in the visible area
-      setViewport({ scale: initialScale, translateX: centerX + SIDEBAR_WIDTH, translateY: centerY });
-      x.set(centerX + SIDEBAR_WIDTH);
+      setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
+      x.set(centerX);
       y.set(centerY);
       scale.set(initialScale);
     }
@@ -205,11 +205,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   const showDefaultSidebar = !hoveredTool;
 
   return (
-    <div
-      ref={containerRef}
-      className={styles.container}
-      style={{ width, height, cursor: 'grab', position: 'relative', display: 'flex' }}
-    >
+    <>
       {/* Sidebar always visible */}
       <Sidebar
         tool={hoveredTool}
@@ -217,159 +213,165 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
         nodes={nodes}
         showDefault={showDefaultSidebar}
       />
-      {/* Graph area, shifted right for sidebar */}
-      <div style={{ width: width - SIDEBAR_WIDTH, height, position: 'relative', overflow: 'hidden' }}>
-        {/* Zoom controls - moved above the panning/zooming area */}
-        <div className={styles.controls}>
-          <button
-            className={styles.zoomButton}
-            onClick={() => {
-              const newScale = Math.min(maxZoom, viewport.scale * 1.2);
-              setViewport(prev => ({ ...prev, scale: newScale }));
-              scale.set(newScale);
-            }}
-          >
-            +
-          </button>
-          <button
-            className={styles.zoomButton}
-            onClick={() => {
-              const newScale = Math.max(minZoom, viewport.scale / 1.2);
-              setViewport(prev => ({ ...prev, scale: newScale }));
-              scale.set(newScale);
-            }}
-          >
-            −
-          </button>
-          <button
-            className={styles.resetButton}
-            onClick={() => {
-              const visibleWidth = width - SIDEBAR_WIDTH;
-              const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
-                width: visibleWidth,
-                height,
-                canvasWidth: 2000,
-                canvasHeight: 1400,
-                initialScale: 0.5
-              });
-              setViewport({ scale: initialScale, translateX: centerX + SIDEBAR_WIDTH, translateY: centerY });
-              scale.set(initialScale);
-              x.set(centerX + SIDEBAR_WIDTH);
-              y.set(centerY);
-            }}
-          >
-            Reset
-          </button>
-        </div>
-        <motion.div
-          drag
-          dragMomentum={false}
-          onDragStart={handlePanStart}
-          onDragEnd={handlePanEnd}
-          onDrag={handlePan}
-          style={{
-            width: '100%',
-            height: '100%',
-            x,
-            y
-          }}
-        >
+      <div
+        ref={containerRef}
+        className={styles.container}
+        style={{ width, height, cursor: 'grab', position: 'relative', display: 'flex', marginLeft: SIDEBAR_WIDTH }}
+      >
+        {/* Graph area, shifted right for sidebar */}
+        <div style={{ width: width - SIDEBAR_WIDTH, height, position: 'relative', overflow: 'hidden' }}>
+          {/* Zoom controls - moved above the panning/zooming area */}
+          <div className={styles.controls}>
+            <button
+              className={styles.zoomButton}
+              onClick={() => {
+                const newScale = Math.min(maxZoom, viewport.scale * 1.2);
+                setViewport(prev => ({ ...prev, scale: newScale }));
+                scale.set(newScale);
+              }}
+            >
+              +
+            </button>
+            <button
+              className={styles.zoomButton}
+              onClick={() => {
+                const newScale = Math.max(minZoom, viewport.scale / 1.2);
+                setViewport(prev => ({ ...prev, scale: newScale }));
+                scale.set(newScale);
+              }}
+            >
+              −
+            </button>
+            <button
+              className={styles.resetButton}
+              onClick={() => {
+                const visibleWidth = width - SIDEBAR_WIDTH;
+                const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
+                  width: visibleWidth,
+                  height,
+                  canvasWidth: 2000,
+                  canvasHeight: 1400,
+                  initialScale: 0.5
+                });
+                setViewport({ scale: initialScale, translateX: centerX + SIDEBAR_WIDTH, translateY: centerY });
+                scale.set(initialScale);
+                x.set(centerX + SIDEBAR_WIDTH);
+                y.set(centerY);
+              }}
+            >
+              Reset
+            </button>
+          </div>
           <motion.div
+            drag
+            dragMomentum={false}
+            onDragStart={handlePanStart}
+            onDragEnd={handlePanEnd}
+            onDrag={handlePan}
             style={{
-              scale,
-              transformOrigin: '0 0',
-              width: 2000,
-              height: 1400,
-              willChange: 'opacity'
+              width: '100%',
+              height: '100%',
+              x,
+              y
             }}
           >
-            {/* SVG for normal edges (below nodes) */}
-            <svg
-              ref={svgRef}
-              className={styles.edgeLayer}
-              width={2000}
-              height={1400}
-              style={{ position: 'absolute', top: 0, left: 0, zIndex: 1 }}
+            <motion.div
+              style={{
+                scale,
+                transformOrigin: '0 0',
+                width: 2000,
+                height: 1400,
+                willChange: 'opacity'
+              }}
             >
-              <defs>
-                <marker
-                  id="arrowhead"
-                  markerWidth="10"
-                  markerHeight="7"
-                  refX="10"
-                  refY="3.5"
-                  orient="auto"
-                >
-                  <polygon
-                    points="0 0, 10 3.5, 0 7"
-                    fill="var(--text-tertiary)"
-                  />
-                </marker>
-              </defs>
-              {normalEdges.map(edge => {
-                const isHighlighted = false;
-                const isHovered = false;
-                return (
-                  <EdgeComponent
-                    key={edge.id}
-                    edge={edge}
-                    isHighlighted={isHighlighted}
-                    isHovered={isHovered}
-                  />
-                );
-              })}
-            </svg>
+              {/* SVG for normal edges (below nodes) */}
+              <svg
+                ref={svgRef}
+                className={styles.edgeLayer}
+                width={2000}
+                height={1400}
+                style={{ position: 'absolute', top: 0, left: 0, zIndex: 1 }}
+              >
+                <defs>
+                  <marker
+                    id="arrowhead"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="10"
+                    refY="3.5"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 10 3.5, 0 7"
+                      fill="var(--text-tertiary)"
+                    />
+                  </marker>
+                </defs>
+                {normalEdges.map(edge => {
+                  const isHighlighted = false;
+                  const isHovered = false;
+                  return (
+                    <EdgeComponent
+                      key={edge.id}
+                      edge={edge}
+                      isHighlighted={isHighlighted}
+                      isHovered={isHovered}
+                    />
+                  );
+                })}
+              </svg>
 
-            {/* Nodes layer */}
-            <div className={styles.nodeLayer} style={{ position: 'relative', zIndex: 2 }}>
-              {visibleNodes.map(node => {
-                const isSelected = selectedNode === node.id;
-                const isHovered = hoveredNode === node.id;
-                const isConnected = selectedNode ?
-                  getConnectedNodes(selectedNode).includes(node.id) : false;
-                // Count dependencies (outgoing) and dependees (incoming)
-                const dependencyCount = edges.filter(e => e.source === node.id).length;
-                const dependeeCount = edges.filter(e => e.target === node.id).length;
-                return (
-                  <ToolNodeComponent
-                    key={node.id}
-                    node={node}
-                    isSelected={isSelected}
-                    isHovered={isHovered}
-                    isConnected={isConnected}
-                    dependencyCount={dependencyCount}
-                    dependeeCount={dependeeCount}
-                    onClick={() => handleNodeClick(node.id)}
-                    onMouseEnter={() => handleNodeHover(node.id)}
-                    onMouseLeave={() => handleNodeHover(null)}
-                  />
-                );
-              })}
-            </div>
+              {/* Nodes layer */}
+              <div className={styles.nodeLayer} style={{ position: 'relative', zIndex: 2 }}>
+                {visibleNodes.map(node => {
+                  const isSelected = selectedNode === node.id;
+                  const isHovered = hoveredNode === node.id;
+                  const isConnected = selectedNode ?
+                    getConnectedNodes(selectedNode).includes(node.id) : false;
+                  // Count dependencies (outgoing) and dependees (incoming)
+                  const dependencyCount = edges.filter(e => e.source === node.id).length;
+                  const dependeeCount = edges.filter(e => e.target === node.id).length;
+                  return (
+                    <ToolNodeComponent
+                      key={node.id}
+                      node={node}
+                      isSelected={isSelected}
+                      isHovered={isHovered}
+                      isConnected={isConnected}
+                      dependencyCount={dependencyCount}
+                      dependeeCount={dependeeCount}
+                      onClick={() => handleNodeClick(node.id)}
+                      onMouseEnter={() => handleNodeHover(node.id)}
+                      onMouseLeave={() => handleNodeHover(null)}
+                    />
+                  );
+                })}
+              </div>
 
-            {/* SVG for highlighted edges (above nodes) */}
-            <svg
-              className={styles.edgeLayer}
-              width={2000}
-              height={1400}
-              style={{ position: 'absolute', top: 0, left: 0, zIndex: 3, pointerEvents: 'none' }}
-            >
-              {highlightedEdges.map(edge => {
-                const isHighlighted = (selectedNode && (edge.source === selectedNode || edge.target === selectedNode));
-                const isHovered = (hoveredNode && (edge.source === hoveredNode || edge.target === hoveredNode));
-                return (
-                  <EdgeComponent
-                    key={edge.id}
-                    edge={edge}
-                    isHighlighted={!!isHighlighted}
-                    isHovered={!!isHovered}
-                  />
-                );
-              })}
-            </svg>
+              {/* SVG for highlighted edges (above nodes) */}
+              <svg
+                className={styles.edgeLayer}
+                width={2000}
+                height={1400}
+                style={{ position: 'absolute', top: 0, left: 0, zIndex: 3, pointerEvents: 'none' }}
+              >
+                {highlightedEdges.map(edge => {
+                  const isHighlighted = (selectedNode && (edge.source === selectedNode || edge.target === selectedNode));
+                  const isHovered = (hoveredNode && (edge.source === hoveredNode || edge.target === hoveredNode));
+                  return (
+                    <EdgeComponent
+                      key={edge.id}
+                      edge={edge}
+                      isHighlighted={!!isHighlighted}
+                      isHovered={!!isHovered}
+                    />
+                  );
+                })}
+              </svg>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
