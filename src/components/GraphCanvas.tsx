@@ -194,6 +194,40 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
       className={styles.container}
       style={{ width, height, cursor: 'grab' }}
     >
+      {/* Zoom controls - moved above the panning/zooming area */}
+      <div className={styles.controls}>
+        <button
+          className={styles.zoomButton}
+          onClick={() => {
+            const newScale = Math.min(maxZoom, viewport.scale * 1.2);
+            setViewport(prev => ({ ...prev, scale: newScale }));
+            scale.set(newScale);
+          }}
+        >
+          +
+        </button>
+        <button
+          className={styles.zoomButton}
+          onClick={() => {
+            const newScale = Math.max(minZoom, viewport.scale / 1.2);
+            setViewport(prev => ({ ...prev, scale: newScale }));
+            scale.set(newScale);
+          }}
+        >
+          −
+        </button>
+        <button
+          className={styles.resetButton}
+          onClick={() => {
+            setViewport({ scale: 0.5, translateX: 0, translateY: 0 });
+            scale.set(0.5);
+            x.set(0);
+            y.set(0);
+          }}
+        >
+          Reset
+        </button>
+      </div>
       <motion.div
         drag
         dragMomentum={false}

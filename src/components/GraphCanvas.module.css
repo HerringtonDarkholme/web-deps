@@ -19,13 +19,21 @@
 }
 
 .controls {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  z-index: 100;
+  z-index: 1000;
+}
+
+@media (max-width: 600px) {
+  .controls {
+    top: 8px;
+    right: 8px;
+    gap: 4px;
+  }
 }
 
 .zoomButton, .resetButton {
