@@ -98,6 +98,34 @@ function App() {
           height={window.innerHeight - (searchQuery ? 140 : 120)}
         />
       </div>
+
+      {/* Disclaimer & Credits */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: 16,
+          left: 0,
+          right: 0,
+          textAlign: 'center',
+          zIndex: 2000,
+          fontSize: 13,
+          color: 'rgba(255,255,255,0.6)',
+          pointerEvents: 'none',
+        }}
+      >
+        <span style={{
+          background: 'rgba(10,10,10,0.85)',
+          borderRadius: 8,
+          padding: '6px 16px',
+          border: '1px solid rgba(255,255,255,0.08)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+          pointerEvents: 'auto',
+        }}>
+          Inspired by <a href="https://github.com/yoavbls/web-chaos-graph" target="_blank" rel="noopener noreferrer" style={{ color: '#0070f3' }}>yoavbls/web-chaos-graph</a> &nbsp;|&nbsp;
+          Vibe coded by <a href="https://github.com/HerringtonDarkholme/" target="_blank" rel="noopener noreferrer" style={{ color: '#f81ce5' }}>@HerringtonDarkholme</a> &nbsp;|&nbsp;
+          If you like this, please give <a href="https://github.com/ast-grep/ast-grep" target="_blank" rel="noopener noreferrer" style={{ color: '#ffd93d' }}>ast-grep</a> a star!
+        </span>
+      </div>
     </div>
   );
 }

@@ -1,3 +1,11 @@
+# Disclaimer & Credits
+
+This project is inspired by [yoavbls/web-chaos-graph](https://github.com/yoavbls/web-chaos-graph).
+
+The app is vibe coded by [@HerringtonDarkholme](https://github.com/HerringtonDarkholme/).
+
+If you like this, please give [ast-grep/ast-grep](https://github.com/ast-grep/ast-grep) a star!
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
