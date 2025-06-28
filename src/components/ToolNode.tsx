@@ -85,15 +85,16 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
     >
       {/* Logo */}
       <div style={{
-        width: '24px',
-        height: '24px',
-        marginBottom: '6px',
-        background: `linear-gradient(135deg, ${node.category.color}, ${node.category.color}CC)`,
-        borderRadius: '6px',
+        width: '44px',
+        height: '44px',
+        marginBottom: '10px',
+        background: 'white',
+        border: `2.5px solid ${node.category.color}`,
+        borderRadius: '12px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '12px',
+        fontSize: '18px',
         fontWeight: 'bold',
         color: '#ffffff'
       }}>
@@ -101,7 +102,7 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         <img
           src={logoSrc}
           alt={node.name}
-          style={{ width: '20px', height: '20px' }}
+          style={{ width: '36px', height: '36px' }}
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).style.display = 'none';
             const nextElement = e.currentTarget.nextElementSibling;

@@ -48,13 +48,13 @@ function App() {
     }
 
     const query = searchQuery.toLowerCase();
-    const matchingTools = graphData.tools.filter(tool => 
+    const matchingTools = graphData.tools.filter(tool =>
       tool.name.toLowerCase().includes(query) ||
       tool.category.name.toLowerCase().includes(query)
     );
 
     const matchingToolIds = new Set(matchingTools.map(t => t.id));
-    
+
     // Include edges that connect to matching tools
     const relevantEdges = graphData.edges.filter(edge =>
       matchingToolIds.has(edge.source) || matchingToolIds.has(edge.target)
@@ -81,12 +81,12 @@ function App() {
   // Calculate layout for the filtered graph
   const { nodes, edges } = useMemo(() => {
     return calculateLayout(filteredData.tools, filteredData.edges, {
-      width: 2000,
-      height: 1400,
+      width: window.innerWidth,
+      height: window.innerHeight,
       nodeWidth: 160,
-      nodeHeight: 80,
+      nodeHeight: 90,
       levelSpacing: 180,
-      categorySpacing: 80,
+      categorySpacing: 90,
       nodeSpacing: 20
     });
   }, [filteredData]);
@@ -120,12 +120,12 @@ function App() {
             </button>
           </div>
         </div>
-        
+
         {searchQuery && (
           <div className="search-results-info">
             Showing {nodes.length} tools matching "{searchQuery}"
             {nodes.length !== graphData.tools.length && (
-              <button 
+              <button
                 type="button"
                 onClick={() => setSearchQuery('')}
                 className="clear-search-btn"
@@ -136,7 +136,7 @@ function App() {
           </div>
         )}
       </div>
-      
+
       <div className="graph-container">
         <GraphCanvas
           nodes={nodes}
