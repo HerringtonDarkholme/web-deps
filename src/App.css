@@ -143,3 +143,31 @@
     top: 100px;
   }
 }
+
+.theme-toggle-btn {
+  background: var(--bg-hover);
+  border: 1.5px solid var(--border-primary);
+  cursor: pointer;
+  font-size: 22px;
+  color: var(--text-primary);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 8px;
+  transition: background 0.2s, border 0.2s;
+  z-index: 1100;
+}
+
+.theme-toggle-btn:focus-visible,
+.theme-toggle-btn:hover {
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--accent-blue);
+}
+
+.theme-toggle-btn svg {
+  display: block;
+  color: inherit;
+}
