@@ -304,6 +304,9 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
               const isHovered = hoveredNode === node.id;
               const isConnected = selectedNode ?
                 getConnectedNodes(selectedNode).includes(node.id) : false;
+              // Count dependencies (outgoing) and dependees (incoming)
+              const dependencyCount = edges.filter(e => e.source === node.id).length;
+              const dependeeCount = edges.filter(e => e.target === node.id).length;
               return (
                 <ToolNodeComponent
                   key={node.id}
@@ -311,6 +314,8 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                   isSelected={isSelected}
                   isHovered={isHovered}
                   isConnected={isConnected}
+                  dependencyCount={dependencyCount}
+                  dependeeCount={dependeeCount}
                   onClick={() => handleNodeClick(node.id)}
                   onMouseEnter={() => handleNodeHover(node.id)}
                   onMouseLeave={() => handleNodeHover(null)}

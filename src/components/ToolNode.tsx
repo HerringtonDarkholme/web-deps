@@ -6,6 +6,8 @@ interface ToolNodeProps {
   isSelected: boolean;
   isHovered: boolean;
   isConnected: boolean;
+  dependencyCount: number;
+  dependeeCount: number;
   onClick: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -16,13 +18,17 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
   isSelected,
   isHovered,
   isConnected,
+  dependencyCount,
+  dependeeCount,
   onClick,
   onMouseEnter,
   onMouseLeave
 }) => {
   // Handle missing logos gracefully
   const logoSrc = node.logo || '/logos/default.svg';
-  
+
+  const connectionCount = dependencyCount + dependeeCount;
+
   return (
     <motion.div
       className="tool-node"
@@ -46,14 +52,14 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         top: node.position.y,
         width: node.dimensions.width,
         height: node.dimensions.height,
-        background: isSelected 
+        background: isSelected
           ? `linear-gradient(135deg, ${node.category.color}22, ${node.category.color}11)`
-          : isHovered 
+          : isHovered
             ? `linear-gradient(135deg, ${node.category.color}15, ${node.category.color}08)`
             : 'var(--bg-secondary)',
-        border: isSelected 
-          ? `2px solid ${node.category.color}` 
-          : isHovered 
+        border: isSelected
+          ? `2px solid ${node.category.color}`
+          : isHovered
             ? `1px solid ${node.category.color}80`
             : `1px solid var(--border-primary)`,
         borderRadius: '12px',
@@ -61,7 +67,7 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         cursor: 'pointer',
         boxShadow: isSelected
           ? `0 8px 32px ${node.category.color}30, 0 4px 16px rgba(0, 0, 0, 0.3)`
-          : isHovered 
+          : isHovered
             ? `0 4px 16px ${node.category.color}20, 0 2px 8px rgba(0, 0, 0, 0.2)`
             : '0 2px 8px rgba(0, 0, 0, 0.1)',
         display: 'flex',
@@ -73,13 +79,14 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         fontWeight: '500',
         opacity: isConnected ? 1 : (isSelected ? 1 : 0.85),
         backdropFilter: 'blur(10px)',
-        userSelect: 'none'
+        userSelect: 'none',
+        overflow: 'visible'
       }}
     >
       {/* Logo */}
-      <div style={{ 
-        width: '24px', 
-        height: '24px', 
+      <div style={{
+        width: '24px',
+        height: '24px',
         marginBottom: '6px',
         background: `linear-gradient(135deg, ${node.category.color}, ${node.category.color}CC)`,
         borderRadius: '6px',
@@ -91,8 +98,8 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         color: '#ffffff'
       }}>
         {/* Fallback to first letter if logo fails to load */}
-        <img 
-          src={logoSrc} 
+        <img
+          src={logoSrc}
           alt={node.name}
           style={{ width: '20px', height: '20px' }}
           onError={(e) => {
@@ -107,29 +114,53 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
           {node.name.charAt(0).toUpperCase()}
         </span>
       </div>
-      
-      {/* Tool Name */}
-      <div style={{ 
-        fontWeight: '600', 
+
+      {/* Tool Name and Connections */}
+      <div style={{
+        fontWeight: '600',
         marginBottom: '2px',
         textAlign: 'center',
         lineHeight: '1.2',
         fontSize: '12px',
-        color: 'var(--text-primary)'
+        color: 'var(--text-primary)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6
       }}>
-        {node.name}
+        <span>{node.name}</span>
+        <span style={{
+          background: (isHovered || isSelected) ? node.category.color : 'transparent',
+          color: (isHovered || isSelected) ? '#fff' : node.category.color,
+          border: `1.2px solid ${node.category.color}`,
+          borderRadius: '5px',
+          fontSize: '8px',
+          fontWeight: 700,
+          boxShadow: 'none',
+          letterSpacing: 0.2,
+          minWidth: 0,
+          height: '14px',
+          width: '16px',
+          lineHeight: '14px',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          transition: 'background 0.2s, color 0.2s, border 0.2s',
+        }}>{connectionCount}</span>
       </div>
-      
+
       {/* Category */}
-      <div style={{ 
-        fontSize: '9px', 
+      <div style={{
+        fontSize: '9px',
         opacity: 0.7,
         textAlign: 'center',
         color: 'var(--text-secondary)',
-        fontWeight: '500'
+        fontWeight: '500',
+        marginTop: 2
       }}>
         {node.category.name}
       </div>
     </motion.div>
   );
-}; 
+};

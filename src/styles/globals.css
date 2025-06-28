@@ -128,9 +128,9 @@ button:focus-visible {
   --transition-normal: 250ms ease;
   --transition-slow: 400ms ease;
 
-  --edge-color: rgba(255,255,255,0.15);
-  --edge-hover-color: rgba(255,255,255,0.6);
-  --edge-highlight-color: #0070f3;
+  --edge-color: rgba(255,255,255,0.35);
+  --edge-hover-color: rgba(255,255,255,0.8);
+  --edge-highlight-color: #40a9ff;
 }
 
 body.light, :root.light {
