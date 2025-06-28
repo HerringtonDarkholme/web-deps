@@ -84,7 +84,7 @@ function App() {
       width: window.innerWidth,
       height: window.innerHeight,
       nodeWidth: 160,
-      nodeHeight: 90,
+      nodeHeight: 100,
       levelSpacing: 180,
       categorySpacing: 90,
       nodeSpacing: 20

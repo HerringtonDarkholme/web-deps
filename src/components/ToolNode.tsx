@@ -88,21 +88,23 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         width: '44px',
         height: '44px',
         marginBottom: '10px',
-        background: 'white',
-        border: `2.5px solid ${node.category.color}`,
-        borderRadius: '12px',
+        background: 'rgba(250, 250, 250, 0.9)',
+        border: `2px solid ${node.category.color}`,
+        borderRadius: '50%',
+        flex: '0 0 auto',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         fontSize: '18px',
         fontWeight: 'bold',
+        overflow: 'hidden',
         color: '#ffffff'
       }}>
         {/* Fallback to first letter if logo fails to load */}
         <img
           src={logoSrc}
           alt={node.name}
-          style={{ width: '36px', height: '36px' }}
+          style={{ width: '40px', height: '40px' }}
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).style.display = 'none';
             const nextElement = e.currentTarget.nextElementSibling;
