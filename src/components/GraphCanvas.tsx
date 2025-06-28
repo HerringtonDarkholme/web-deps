@@ -41,8 +41,10 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   const minZoom = 0.1;
   const maxZoom = 2;
 
-  // Sidebar width
+  // Sidebar width (only for desktop)
   const SIDEBAR_WIDTH = 320;
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const effectiveSidebarWidth = isMobile ? 0 : SIDEBAR_WIDTH;
 
   // Pan and zoom handlers
   const handleWheel = useCallback((event: WheelEvent) => {
@@ -176,11 +178,11 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   });
   const normalEdges = visibleEdges.filter(edge => !highlightedEdges.includes(edge));
 
-  // Center the graph on initial load, accounting for sidebar
+  // Center the graph on initial load, accounting for sidebar on desktop
   useEffect(() => {
     if (viewport.translateX === 0 && viewport.translateY === 0) {
-      // Center the graph in the visible area (right of sidebar)
-      const visibleWidth = width - SIDEBAR_WIDTH;
+      // Center the graph in the visible area
+      const visibleWidth = width - effectiveSidebarWidth;
       const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
         width: visibleWidth,
         height,
@@ -188,7 +190,6 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
         canvasHeight: 1400,
         initialScale: 0.5
       });
-      // Offset by sidebar width so the graph is centered in the visible area
       setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
       x.set(centerX);
       y.set(centerY);
@@ -216,11 +217,18 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
       <div
         ref={containerRef}
         className={styles.container}
-        style={{ width, height, cursor: 'grab', position: 'relative', display: 'flex', marginLeft: SIDEBAR_WIDTH }}
+        style={{ 
+          width, 
+          height, 
+          cursor: 'grab', 
+          position: 'relative', 
+          display: 'flex', 
+          marginLeft: isMobile ? 0 : SIDEBAR_WIDTH 
+        }}
       >
-        {/* Graph area, shifted right for sidebar */}
-        <div style={{ width: width - SIDEBAR_WIDTH, height, position: 'relative', overflow: 'hidden' }}>
-          {/* Zoom controls - moved above the panning/zooming area */}
+        {/* Graph area */}
+        <div style={{ width: width - effectiveSidebarWidth, height, position: 'relative', overflow: 'hidden' }}>
+          {/* Zoom controls */}
           <div className={styles.controls}>
             <button
               className={styles.zoomButton}
@@ -245,7 +253,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
             <button
               className={styles.resetButton}
               onClick={() => {
-                const visibleWidth = width - SIDEBAR_WIDTH;
+                const visibleWidth = width - effectiveSidebarWidth;
                 const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
                   width: visibleWidth,
                   height,
@@ -253,9 +261,9 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                   canvasHeight: 1400,
                   initialScale: 0.5
                 });
-                setViewport({ scale: initialScale, translateX: centerX + SIDEBAR_WIDTH, translateY: centerY });
+                setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
                 scale.set(initialScale);
-                x.set(centerX + SIDEBAR_WIDTH);
+                x.set(centerX);
                 y.set(centerY);
               }}
             >
