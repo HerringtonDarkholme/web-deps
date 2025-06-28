@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { GraphCanvas } from './components/GraphCanvas';
 import { SearchBar } from './components/SearchBar';
 import { calculateLayout } from './layout';
@@ -7,6 +7,39 @@ import './App.css';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    return 'dark';
+  });
+
+  // Apply theme to body
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      if (theme === 'light') {
+        document.body.classList.add('light');
+      } else {
+        document.body.classList.remove('light');
+      }
+    }
+  }, [theme]);
+
+  // Listen for system theme changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      const media = window.matchMedia('(prefers-color-scheme: light)');
+      const handler = (e: MediaQueryListEvent) => {
+        setTheme(e.matches ? 'light' : 'dark');
+      };
+      media.addEventListener('change', handler);
+      return () => media.removeEventListener('change', handler);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
 
   // Filter tools based on search query
   const filteredData = useMemo(() => {
@@ -72,6 +105,33 @@ function App() {
           </div>
           
           <SearchBar onSearch={handleSearch} />
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            style={{
+              marginLeft: 16,
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: 22,
+              color: 'var(--text-primary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 40,
+              width: 40,
+              borderRadius: 8,
+              transition: 'background 0.2s',
+            }}
+          >
+            {theme === 'light' ? (
+              // Sun icon
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2m11-11h-2M3 12H1m16.95 7.07-1.41-1.41M6.34 6.34 4.93 4.93m12.02 0-1.41 1.41M6.34 17.66l-1.41 1.41"/></svg>
+            ) : (
+              // Moon icon
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+            )}
+          </button>
         </div>
         
         {searchQuery && (
@@ -109,16 +169,16 @@ function App() {
           textAlign: 'center',
           zIndex: 2000,
           fontSize: 13,
-          color: 'rgba(255,255,255,0.6)',
+          color: 'var(--text-secondary)',
           pointerEvents: 'none',
         }}
       >
         <span style={{
-          background: 'rgba(10,10,10,0.85)',
+          background: 'var(--bg-tertiary)',
           borderRadius: 8,
           padding: '6px 16px',
-          border: '1px solid rgba(255,255,255,0.08)',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+          border: '1px solid var(--border-primary)',
+          boxShadow: '0 2px 8px var(--shadow-md)',
           pointerEvents: 'auto',
         }}>
           Inspired by <a href="https://github.com/yoavbls/web-chaos-graph" target="_blank" rel="noopener noreferrer" style={{ color: '#0070f3' }}>yoavbls/web-chaos-graph</a> &nbsp;|&nbsp;

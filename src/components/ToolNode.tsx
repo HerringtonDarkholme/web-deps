@@ -1,4 +1,3 @@
-import type React from 'react';
 import { motion } from 'framer-motion';
 import type { ToolNode } from '../types';
 
@@ -51,12 +50,12 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
           ? `linear-gradient(135deg, ${node.category.color}22, ${node.category.color}11)`
           : isHovered 
             ? `linear-gradient(135deg, ${node.category.color}15, ${node.category.color}08)`
-            : 'rgba(255, 255, 255, 0.03)',
+            : 'var(--bg-secondary)',
         border: isSelected 
           ? `2px solid ${node.category.color}` 
           : isHovered 
             ? `1px solid ${node.category.color}80`
-            : '1px solid rgba(255, 255, 255, 0.1)',
+            : `1px solid var(--border-primary)`,
         borderRadius: '12px',
         padding: '12px',
         cursor: 'pointer',
@@ -69,7 +68,7 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        color: '#ffffff',
+        color: 'var(--text-primary)',
         fontSize: '11px',
         fontWeight: '500',
         opacity: isConnected ? 1 : (isSelected ? 1 : 0.85),
@@ -97,9 +96,9 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
           alt={node.name}
           style={{ width: '20px', height: '20px' }}
           onError={(e) => {
-            e.currentTarget.style.display = 'none';
-            const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-            if (nextElement) {
+            (e.currentTarget as HTMLImageElement).style.display = 'none';
+            const nextElement = e.currentTarget.nextElementSibling;
+            if (nextElement && nextElement instanceof HTMLSpanElement) {
               nextElement.style.display = 'block';
             }
           }}

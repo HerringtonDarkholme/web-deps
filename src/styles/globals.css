@@ -78,58 +78,76 @@ button:focus-visible {
 
 /* Vercel Design System Colors */
 :root {
---bg-primary: #000;
---bg-secondary: #111;
---bg-tertiary: #1a1a1a;
---bg-hover: #1e1e1e;
+  --bg-primary: #000;
+  --bg-secondary: #111;
+  --bg-tertiary: #1a1a1a;
+  --bg-hover: #1e1e1e;
+  --text-primary: #fff;
+  --text-secondary: #888;
+  --text-tertiary: #666;
+  --border-primary: #333;
+  --border-secondary: #222;
+  --accent-blue: #0070f3;
+  --accent-cyan: #50e3c2;
+  --accent-violet: #7928ca;
+  --accent-pink: #f81ce5;
+  --accent-orange: #ff6600;
+  --accent-yellow: #ffd93d;
+  --accent-green: #6bcf7f;
+  --accent-red: #ff4757;
 
---text-primary: #fff;
---text-secondary: #888;
---text-tertiary: #666;
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
 
---border-primary: #333;
---border-secondary: #222;
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
---accent-blue: #0070f3;
---accent-cyan: #50e3c2;
---accent-violet: #7928ca;
---accent-pink: #f81ce5;
---accent-orange: #ff6600;
---accent-yellow: #ffd93d;
---accent-green: #6bcf7f;
---accent-red: #ff4757;
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
 
-/* Spacing */
---space-1: 4px;
---space-2: 8px;
---space-3: 12px;
---space-4: 16px;
---space-5: 20px;
---space-6: 24px;
---space-8: 32px;
---space-12: 48px;
---space-16: 64px;
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
 
-/* Border Radius */
---radius-sm: 4px;
---radius-md: 8px;
---radius-lg: 12px;
---radius-xl: 16px;
+  /* Animation */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+}
 
-/* Shadows */
---shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
---shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
---shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.1);
---shadow-xl: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
-
-/* Typography */
---font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
---font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
-
-/* Animation */
---transition-fast: 150ms ease;
---transition-normal: 250ms ease;
---transition-slow: 400ms ease;
+body.light, :root.light {
+  color-scheme: light;
+  --bg-primary: #fff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #eaecef;
+  --bg-hover: #f0f1f3;
+  --text-primary: #222;
+  --text-secondary: #666;
+  --text-tertiary: #aaa;
+  --border-primary: #d0d7de;
+  --border-secondary: #eaecef;
+  --accent-blue: #0070f3;
+  --accent-cyan: #06aed4;
+  --accent-violet: #7928ca;
+  --accent-pink: #f81ce5;
+  --accent-orange: #ff6600;
+  --accent-yellow: #ffd93d;
+  --accent-green: #6bcf7f;
+  --accent-red: #ff4757;
 }
 
 .app {
