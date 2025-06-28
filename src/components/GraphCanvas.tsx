@@ -4,6 +4,7 @@ import type { ToolNode, EdgeNode, ViewportState } from '../types';
 import { ToolNodeComponent } from './ToolNode';
 import { EdgeComponent } from './Edge';
 import styles from './GraphCanvas.module.css';
+import { calculateCenteredViewport } from './graphUtils';
 
 interface GraphCanvasProps {
   nodes: ToolNode[];
@@ -175,11 +176,13 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   useEffect(() => {
     // Only center if at initial state
     if (viewport.translateX === 0 && viewport.translateY === 0) {
-      const canvasWidth = 2000;
-      const canvasHeight = 1400;
-      const initialScale = 0.5;
-      const centerX = (width - canvasWidth * initialScale) / 2;
-      const centerY = (height - canvasHeight * initialScale) / 2;
+      const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
+        width,
+        height,
+        canvasWidth: 2000,
+        canvasHeight: 1400,
+        initialScale: 0.5
+      });
       setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
       x.set(centerX);
       y.set(centerY);
@@ -219,10 +222,17 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
         <button
           className={styles.resetButton}
           onClick={() => {
-            setViewport({ scale: 0.5, translateX: 0, translateY: 0 });
-            scale.set(0.5);
-            x.set(0);
-            y.set(0);
+            const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
+              width,
+              height,
+              canvasWidth: 2000,
+              canvasHeight: 1400,
+              initialScale: 0.5
+            });
+            setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
+            scale.set(initialScale);
+            x.set(centerX);
+            y.set(centerY);
           }}
         >
           Reset
@@ -357,10 +367,17 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
         <button
           className={styles.resetButton}
           onClick={() => {
-            setViewport({ scale: 0.5, translateX: 0, translateY: 0 });
-            scale.set(0.5);
-            x.set(0);
-            y.set(0);
+            const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
+              width,
+              height,
+              canvasWidth: 2000,
+              canvasHeight: 1400,
+              initialScale: 0.5
+            });
+            setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
+            scale.set(initialScale);
+            x.set(centerX);
+            y.set(centerY);
           }}
         >
           Reset
