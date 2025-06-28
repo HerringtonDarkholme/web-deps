@@ -163,6 +163,14 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
     return visibleNodes.includes(sourceNode) || visibleNodes.includes(targetNode);
   });
   
+  // Split edges into highlighted and non-highlighted
+  const highlightedEdges = visibleEdges.filter(edge => {
+    const isHighlighted = (selectedNode && (edge.source === selectedNode || edge.target === selectedNode)) ||
+      (hoveredNode && (edge.source === hoveredNode || edge.target === hoveredNode));
+    return isHighlighted;
+  });
+  const normalEdges = visibleEdges.filter(edge => !highlightedEdges.includes(edge));
+  
   return (
     <div 
       ref={containerRef}
@@ -190,7 +198,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
             height: 1400
           }}
         >
-          {/* SVG for edges */}
+          {/* SVG for normal edges (below nodes) */}
           <svg
             ref={svgRef}
             className={styles.edgeLayer}
@@ -213,23 +221,20 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                 />
               </marker>
             </defs>
-            {visibleEdges.map(edge => {
-              const isHighlighted = selectedNode && 
-                (edge.source === selectedNode || edge.target === selectedNode);
-              const isHovered = hoveredNode && 
-                (edge.source === hoveredNode || edge.target === hoveredNode);
-              
+            {normalEdges.map(edge => {
+              const isHighlighted = false;
+              const isHovered = false;
               return (
                 <EdgeComponent
                   key={edge.id}
                   edge={edge}
-                  isHighlighted={!!isHighlighted}
-                  isHovered={!!isHovered}
+                  isHighlighted={isHighlighted}
+                  isHovered={isHovered}
                 />
               );
             })}
           </svg>
-          
+
           {/* Nodes layer */}
           <div className={styles.nodeLayer} style={{ position: 'relative', zIndex: 2 }}>
             {visibleNodes.map(node => {
@@ -237,7 +242,6 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
               const isHovered = hoveredNode === node.id;
               const isConnected = selectedNode ? 
                 getConnectedNodes(selectedNode).includes(node.id) : false;
-              
               return (
                 <ToolNodeComponent
                   key={node.id}
@@ -252,6 +256,27 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
               );
             })}
           </div>
+
+          {/* SVG for highlighted edges (above nodes) */}
+          <svg
+            className={styles.edgeLayer}
+            width={2000}
+            height={1400}
+            style={{ position: 'absolute', top: 0, left: 0, zIndex: 3, pointerEvents: 'none' }}
+          >
+            {highlightedEdges.map(edge => {
+              const isHighlighted = (selectedNode && (edge.source === selectedNode || edge.target === selectedNode));
+              const isHovered = (hoveredNode && (edge.source === hoveredNode || edge.target === hoveredNode));
+              return (
+                <EdgeComponent
+                  key={edge.id}
+                  edge={edge}
+                  isHighlighted={!!isHighlighted}
+                  isHovered={!!isHovered}
+                />
+              );
+            })}
+          </svg>
         </motion.div>
       </motion.div>
       
