@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import * as d3 from 'd3';
+import { motion, useMotionValue } from 'framer-motion';
 import type { ToolNode, EdgeNode, ViewportState } from '../types';
 import { ToolNodeComponent } from './ToolNode';
 import { EdgeComponent } from './Edge';
@@ -85,7 +84,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
     }
   }, []);
   
-  const handlePan = useCallback((event: any, info: any) => {
+  const handlePan = useCallback((_event: any, info: any) => {
     const newTranslateX = viewport.translateX + info.delta.x;
     const newTranslateY = viewport.translateY + info.delta.y;
     

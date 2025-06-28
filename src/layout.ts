@@ -78,7 +78,7 @@ export function calculateLayout(
   const nodeMap = new Map(nodes.map(node => [node.id, node]));
   
   // Calculate edge positions and control points
-  const edgeNodes: EdgeNode[] = edges.map((edge, index) => {
+  const edgeNodes: EdgeNode[] = edges.map((edge) => {
     const sourceNode = nodeMap.get(edge.source);
     const targetNode = nodeMap.get(edge.target);
     
@@ -117,7 +117,6 @@ export function calculateLayout(
 }
 
 function calculateControlPoints(source: Position, target: Position): Position[] {
-  const dx = target.x - source.x;
   const dy = target.y - source.y;
   
   // For a smooth cubic bezier curve

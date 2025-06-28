@@ -6,14 +6,14 @@ export const categories: ToolCategory[] = [
   { id: 'framework', name: 'Framework', level: 2, color: '#7928ca' },
   { id: 'library', name: 'Library', level: 3, color: '#f81ce5' },
   { id: 'bundler', name: 'Bundler', level: 4, color: '#ff6600' },
-  { id: 'compiler', name: 'Compiler', level: 5, color: '#06ffa5' },
+  { id: 'linter', name: 'Linter', level: 5, color: '#ffd93d' },
+  { id: 'formatter', name: 'Formatter', level: 5, color: '#6bcf7f' },
+  { id: 'minimizer', name: 'Minimizer', level: 5, color: '#ff4757' },
+  { id: 'compiler', name: 'Compiler', level: 6, color: '#06ffa5' },
   { id: 'parser', name: 'Parser', level: 6, color: '#1fb6ff' },
-  { id: 'linter', name: 'Linter', level: 7, color: '#ffd93d' },
-  { id: 'formatter', name: 'Formatter', level: 8, color: '#6bcf7f' },
-  { id: 'runtime', name: 'Runtime', level: 9, color: '#4d4d4d' },
-  { id: 'minimizer', name: 'Minimizer', level: 10, color: '#ff4757' },
-  { id: 'testing', name: 'Testing', level: 11, color: '#5f27cd' },
-  { id: 'language-tool', name: 'Language Tool', level: 12, color: '#00d2d3' },
+  { id: 'runtime', name: 'Runtime', level: 7, color: '#4d4d4d' },
+  { id: 'testing', name: 'Testing', level: 3, color: '#5f27cd' },
+  { id: 'language-tool', name: 'Language Tool', level: 3, color: '#00d2d3' },
 ];
 
 // Helper function to categorize tools based on their name and common patterns

@@ -1,7 +1,8 @@
 .container {
   position: relative;
   overflow: hidden;
-  background: radial-gradient(ellipse at center, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  border-radius: 12px;
   user-select: none;
 }
 
@@ -19,58 +20,38 @@
 
 .controls {
   position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
+  top: 20px;
+  right: 20px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 8px;
   z-index: 100;
 }
 
-.zoomButton {
+.zoomButton, .resetButton {
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-md);
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
-  color: var(--text-primary);
-  font-size: 18px;
-  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.zoomButton:hover {
-  background: var(--bg-hover);
-  border-color: var(--accent-blue);
+.zoomButton:hover, .resetButton:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
-.zoomButton:active {
-  transform: translateY(0);
 }
 
 .resetButton {
-  height: 32px;
-  padding: 0 var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
-  color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 500;
-  transition: all var(--transition-fast);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.resetButton:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  border-color: var(--accent-blue);
 } 
