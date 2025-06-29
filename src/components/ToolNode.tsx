@@ -160,9 +160,8 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
       {/* Category */}
       <div style={{
         fontSize: '9px',
-        opacity: 0.7,
         textAlign: 'center',
-        color: 'var(--text-secondary)',
+        color: node.category.color,
         fontWeight: '500',
         marginTop: 2
       }}>
