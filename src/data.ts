@@ -98,6 +98,7 @@ const rawEdges = [
   { source: 'Mitosis', target: 'Svelte', label: 'Compiles to' },
   { source: 'Mitosis', target: 'React', label: 'Compiles to' },
   { source: 'Volar.js', target: 'Vue.js', label: 'Language tools' },
+  { source: 'Volar.js', target: 'Analog', label: 'Language tools' },
   { source: 'Volar.js', target: 'Astro', label: 'Language tools' },
   { source: 'Astro', target: 'Solid.js', label: 'supports' },
   { source: 'Astro', target: 'Qwik', label: 'With @qwikdev/astro' },
