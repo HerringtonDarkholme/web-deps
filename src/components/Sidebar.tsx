@@ -182,21 +182,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, selectedNo
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 8,
-                  background: '#1da1f2',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 8,
-                  padding: '8px 16px',
-                  fontWeight: 700,
-                  fontSize: 15,
+                  gap: 6,
+                  background: 'var(--bg-tertiary, #f5f5f7)',
+                  color: 'var(--text-primary, #222)',
+                  border: '1px solid var(--border-primary, #e0e0e0)',
+                  borderRadius: 6,
+                  padding: '8px 14px',
+                  fontWeight: 500,
+                  fontSize: 14,
                   cursor: 'pointer',
-                  boxShadow: '0 2px 8px rgba(29,161,242,0.08)',
+                  boxShadow: 'none',
                   transition: 'background 0.2s',
                 }}
               >
-                <span style={{ fontSize: 18, lineHeight: 1 }}>🐦</span>
-                Share to Twitter
+                <span style={{ fontSize: 15, lineHeight: 1, fontWeight: 700 }}>𝕏</span>
+                Share to X
               </button>
               <button
                 type="button"
@@ -204,21 +204,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, selectedNo
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 8,
-                  background: '#222',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 8,
-                  padding: '8px 16px',
-                  fontWeight: 700,
-                  fontSize: 15,
+                  gap: 6,
+                  background: 'var(--bg-tertiary, #f5f5f7)',
+                  color: 'var(--text-primary, #222)',
+                  border: '1px solid var(--border-primary, #e0e0e0)',
+                  borderRadius: 6,
+                  padding: '8px 14px',
+                  fontWeight: 500,
+                  fontSize: 14,
                   cursor: 'pointer',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  boxShadow: 'none',
                   transition: 'background 0.2s',
                 }}
               >
-                <span style={{ fontSize: 18, lineHeight: 1 }}>📋</span>
-                Copy Canvas
+                <span style={{ fontSize: 15, lineHeight: 1 }}>📋</span>
+                Copy Image
               </button>
             </div>
           </>
