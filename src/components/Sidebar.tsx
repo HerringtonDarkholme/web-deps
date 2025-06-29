@@ -1,4 +1,4 @@
-import type { ToolNode, EdgeNode } from '../types';
+import type { ToolNode, EdgeNode, FocusMode } from '../types';
 import { useState, useEffect } from 'react';
 
 interface SidebarProps {
@@ -6,12 +6,14 @@ interface SidebarProps {
   edges: EdgeNode[];
   nodes: ToolNode[];
   showDefault?: boolean;
+  focusMode: FocusMode;
+  onFocusModeChange: (mode: FocusMode) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefault }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefault, focusMode, onFocusModeChange }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isHandleHovered, setIsHandleHovered] = useState(false);
-  
+
   // Base styles for both desktop and mobile
   const baseStyles = {
     background: 'var(--bg-secondary)',
@@ -79,12 +81,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefaul
     }
   };
 
+  // Focus mode control
+  const focusModes: { label: string; value: FocusMode }[] = [
+    { label: 'None', value: 'none' },
+    { label: 'Blur', value: 'blur' },
+    { label: 'Hide', value: 'hide' },
+  ];
+
   if (showDefault) {
     return (
       <aside style={currentStyles}>
         {/* Mobile handle */}
         {isMobile && (
-          <div 
+          <div
             onClick={handleToggleCollapse}
             onKeyDown={handleKeyDown}
             onMouseEnter={() => setIsHandleHovered(true)}
@@ -120,6 +129,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefaul
             </ul>
           </>
         )}
+        {/* Focus mode control (only when no tool is hovered) */}
+        <div style={{ marginBottom: 18, display: 'flex', gap: 8, alignItems: 'center' }}>
+          <span style={{ fontWeight: 600, fontSize: 13, marginRight: 6 }}>Focus:</span>
+          {focusModes.map(mode => (
+            <button
+              key={mode.value}
+              onClick={() => onFocusModeChange(mode.value)}
+              style={{
+                padding: '3px 10px',
+                borderRadius: 6,
+                border: focusMode === mode.value ? '2px solid var(--accent-primary, #0070f3)' : '1px solid var(--border-primary)',
+                background: focusMode === mode.value ? 'var(--accent-primary, #0070f3)' : 'transparent',
+                color: focusMode === mode.value ? '#fff' : 'var(--text-primary)',
+                fontWeight: 600,
+                fontSize: 13,
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+                outline: 'none',
+              }}
+              aria-pressed={focusMode === mode.value}
+              type="button"
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
       </aside>
     );
   }
@@ -130,7 +165,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefaul
     <aside style={currentStyles}>
       {/* Mobile handle */}
       {isMobile && (
-        <div 
+        <div
           onClick={handleToggleCollapse}
           onKeyDown={handleKeyDown}
           onMouseEnter={() => setIsHandleHovered(true)}

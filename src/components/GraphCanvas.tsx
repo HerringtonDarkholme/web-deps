@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
-import type { ToolNode, EdgeNode, ViewportState } from '../types';
+import type { ToolNode, EdgeNode, ViewportState, FocusMode } from '../types';
 import { ToolNodeComponent } from './ToolNode';
 import { EdgeComponent } from './Edge';
 import styles from './GraphCanvas.module.css';
@@ -31,6 +31,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [focusMode, setFocusMode] = useState<FocusMode>('none');
 
   // Motion values for smooth interactions
   const x = useMotionValue(0);
@@ -153,7 +154,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   }, [getConnectedEdges]);
 
   // Filter visible elements based on viewport
-  const visibleNodes = nodes.filter(node => {
+  let visibleNodes = nodes.filter(node => {
     const nodeX = (node.position.x * viewport.scale) + viewport.translateX;
     const nodeY = (node.position.y * viewport.scale) + viewport.translateY;
     const nodeWidth = node.dimensions.width * viewport.scale;
@@ -164,6 +165,9 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
            nodeY + nodeHeight >= -50 &&
            nodeY <= height + 50;
   });
+  if (focusMode === 'hide' && selectedNodes.length > 0) {
+    visibleNodes = visibleNodes.filter(node => selectedNodes.includes(node.id));
+  }
 
   const visibleEdges = edges.filter(edge => {
     const sourceNode = nodes.find(n => n.id === edge.source);
@@ -210,6 +214,8 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
         edges={hoveredEdges}
         nodes={nodes}
         showDefault={showDefaultSidebar}
+        focusMode={focusMode}
+        onFocusModeChange={setFocusMode}
       />
       <div
         ref={containerRef}
@@ -345,6 +351,8 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                   // Count dependencies (outgoing) and dependees (incoming)
                   const dependencyCount = edges.filter(e => e.source === node.id).length;
                   const dependeeCount = edges.filter(e => e.target === node.id).length;
+                  // For blur mode, pass a prop to ToolNodeComponent to gray out/blur unselected nodes
+                  const blurOut = focusMode === 'blur' && selectedNodes.length > 0 && !isSelected;
                   return (
                     <ToolNodeComponent
                       key={node.id}
@@ -357,6 +365,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                       onClick={() => handleNodeClick(node.id)}
                       onMouseEnter={() => handleNodeHover(node.id)}
                       onMouseLeave={() => handleNodeHover(null)}
+                      blurOut={blurOut}
                     />
                   );
                 })}

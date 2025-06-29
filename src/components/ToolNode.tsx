@@ -11,6 +11,7 @@ interface ToolNodeProps {
   onClick: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  blurOut?: boolean;
 }
 
 export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
@@ -22,7 +23,8 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
   dependeeCount,
   onClick,
   onMouseEnter,
-  onMouseLeave
+  onMouseLeave,
+  blurOut = false
 }) => {
   // Handle missing logos gracefully
   const logoSrc = node.logo || '/logos/default.svg';
@@ -77,7 +79,8 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         color: 'var(--text-primary)',
         fontSize: '11px',
         fontWeight: '500',
-        opacity: isConnected ? 1 : (isSelected ? 1 : 0.85),
+        filter: blurOut ? 'blur(2.5px) grayscale(0.7)' : undefined,
+        opacity: blurOut ? 0.35 : (isConnected ? 1 : (isSelected ? 1 : 0.85)),
         backdropFilter: 'blur(10px)',
         userSelect: 'none',
         overflow: 'visible'

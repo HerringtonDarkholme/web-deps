@@ -52,4 +52,6 @@ export interface EdgeNode extends Edge {
   sourcePosition: Position;
   targetPosition: Position;
   controlPoints?: Position[];
-} 
+}
+
+export type FocusMode = 'none' | 'blur' | 'hide'; 
