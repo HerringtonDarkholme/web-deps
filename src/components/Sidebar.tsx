@@ -1,16 +1,18 @@
 import type { ToolNode, EdgeNode, FocusMode } from '../types';
 import { useState, useEffect } from 'react';
+import * as htmlToImage from 'html-to-image';
 
 interface SidebarProps {
   tool: ToolNode | null;
   edges: EdgeNode[];
   nodes: ToolNode[];
+  selectedNodes: string[];
   showDefault?: boolean;
   focusMode: FocusMode;
   onFocusModeChange: (mode: FocusMode) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefault, focusMode, onFocusModeChange }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, selectedNodes, showDefault, focusMode, onFocusModeChange }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isHandleHovered, setIsHandleHovered] = useState(false);
 
@@ -88,6 +90,51 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefaul
     { label: 'Hide', value: 'hide' },
   ];
 
+  // Helper to get the graph container element
+  function getGraphContainer() {
+    // Use a static id for the main graph container
+    return document.getElementById('graph-canvas-container');
+  }
+
+  // Share to Twitter handler
+  function handleShareToTwitter() {
+    // Compose a catchy tweet using only selected tools
+    let tweet = 'Check out my web tools dependency graph! 🚀 \nhttps://web-deps.vercel.app/';
+    if (nodes && nodes.length > 0 && selectedNodes && selectedNodes.length > 0) {
+      const selected = nodes.filter(t => selectedNodes.includes(t.id));
+      if (selected.length > 0) {
+        const toolNames = selected.map(t => t.name).join(', ');
+        tweet = `Check out my web dependency graph! I used ${selected.length} tools: ${toolNames} 🚀 \nhttps://web-deps.vercel.app/`;
+      }
+    }
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`;
+    window.open(twitterUrl, '_blank');
+  }
+
+  // Copy canvas to clipboard handler
+  async function handleCopyCanvasToClipboard() {
+    const container = getGraphContainer();
+    if (!container) {
+      alert('Could not find the graph canvas to capture.');
+      return;
+    }
+    try {
+      const blob = await htmlToImage.toBlob(container as HTMLElement, {
+        backgroundColor: undefined,
+        cacheBust: true,
+        width: 1000,
+        height: 700,
+      });
+      if (!blob) throw new Error('Failed to create image blob');
+      await navigator.clipboard.write([
+        new window.ClipboardItem({ 'image/png': blob })
+      ]);
+      alert('Canvas image copied to clipboard!');
+    } catch {
+      alert('Failed to copy image to clipboard.');
+    }
+  }
+
   if (showDefault) {
     return (
       <aside style={currentStyles}>
@@ -127,6 +174,53 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, showDefaul
               <li>{isMobile ? 'Tap' : 'Click'} a node to select it and highlight its connections.</li>
               <li>Use the theme toggle in the header to switch between light and dark mode.</li>
             </ul>
+            {/* Share to Twitter and Copy Canvas buttons */}
+            <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
+              <button
+                type="button"
+                onClick={handleShareToTwitter}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  background: '#1da1f2',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 8,
+                  padding: '8px 16px',
+                  fontWeight: 700,
+                  fontSize: 15,
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(29,161,242,0.08)',
+                  transition: 'background 0.2s',
+                }}
+              >
+                <span style={{ fontSize: 18, lineHeight: 1 }}>🐦</span>
+                Share to Twitter
+              </button>
+              <button
+                type="button"
+                onClick={handleCopyCanvasToClipboard}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  background: '#222',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 8,
+                  padding: '8px 16px',
+                  fontWeight: 700,
+                  fontSize: 15,
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  transition: 'background 0.2s',
+                }}
+              >
+                <span style={{ fontSize: 18, lineHeight: 1 }}>📋</span>
+                Copy Canvas
+              </button>
+            </div>
           </>
         )}
         {/* Focus mode control (only when no tool is hovered) */}

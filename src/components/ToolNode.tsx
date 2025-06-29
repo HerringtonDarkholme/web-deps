@@ -34,6 +34,7 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
   return (
     <motion.div
       className="tool-node"
+      id={`tool-node-${node.id}`}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

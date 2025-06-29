@@ -213,6 +213,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
         tool={hoveredTool}
         edges={hoveredEdges}
         nodes={nodes}
+        selectedNodes={selectedNodes}
         showDefault={showDefaultSidebar}
         focusMode={focusMode}
         onFocusModeChange={setFocusMode}
@@ -220,13 +221,13 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
       <div
         ref={containerRef}
         className={styles.container}
-        style={{ 
-          width, 
-          height, 
-          cursor: 'grab', 
-          position: 'relative', 
-          display: 'flex', 
-          marginLeft: isMobile ? 0 : SIDEBAR_WIDTH 
+        style={{
+          width,
+          height,
+          cursor: 'grab',
+          position: 'relative',
+          display: 'flex',
+          marginLeft: isMobile ? 0 : SIDEBAR_WIDTH
         }}
       >
         {/* Graph area */}
@@ -287,6 +288,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
             }}
           >
             <motion.div
+              id="graph-canvas-container"
               style={{
                 scale,
                 transformOrigin: '0 0',
