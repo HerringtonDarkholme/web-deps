@@ -1,16 +1,13 @@
-import type React from 'react';
 import type { EdgeNode } from '../types';
 
 interface EdgeProps {
   edge: EdgeNode;
-  isHighlighted: boolean;
-  isHovered: boolean;
+  edgeState: 'default' | 'hover' | 'selected-hover' | 'selected-between';
 }
 
 export const EdgeComponent: React.FC<EdgeProps> = ({
   edge,
-  isHighlighted,
-  isHovered
+  edgeState
 }) => {
   const { sourcePosition, targetPosition, controlPoints } = edge;
   
@@ -28,20 +25,24 @@ export const EdgeComponent: React.FC<EdgeProps> = ({
     return `M ${sourcePosition.x} ${sourcePosition.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${targetPosition.x} ${targetPosition.y}`;
   };
 
-  // Use CSS variables for edge colors to support both themes
-  const strokeColor = isHighlighted 
-    ? 'var(--edge-highlight-color, #0070f3)'
-    : isHovered 
-      ? 'var(--edge-hover-color, rgba(60,60,60,0.6))' 
-      : 'var(--edge-color, rgba(60,60,60,0.25))';
-  
-  const strokeWidth = isHighlighted ? 2.5 : isHovered ? 1.5 : 1;
-  const opacity = isHighlighted || isHovered ? 1 : 0.4;
+  // Edge color logic
+  let strokeColor = 'var(--edge-color, rgba(60,60,60,0.25))';
+  let strokeWidth = 1;
+  let opacity = 0.4;
+  if (edgeState === 'hover') {
+    strokeColor = 'var(--edge-hover-color, rgba(60,60,60,0.6))';
+    strokeWidth = 1.5;
+    opacity = 1;
+  } else if (edgeState === 'selected-hover' || edgeState === 'selected-between') {
+    strokeColor = 'var(--edge-highlight-color, #0070f3)';
+    strokeWidth = 2.5;
+    opacity = 1;
+  }
 
   return (
     <g>
-      {/* Glow effect for highlighted edges */}
-      {isHighlighted && (
+      {/* Glow effect for blue edges */}
+      {(edgeState === 'selected-hover' || edgeState === 'selected-between') && (
         <path
           d={createPath()}
           stroke={strokeColor}
@@ -51,7 +52,7 @@ export const EdgeComponent: React.FC<EdgeProps> = ({
           filter="blur(2px)"
         />
       )}
-      
+
       {/* Main edge */}
       <path
         d={createPath()}
@@ -60,14 +61,14 @@ export const EdgeComponent: React.FC<EdgeProps> = ({
         fill="none"
         opacity={opacity}
         markerEnd="url(#arrowhead)"
-        strokeDasharray={isHovered ? "4 2" : "none"}
+        strokeDasharray={edgeState === 'hover' ? "4 2" : "none"}
         style={{
           transition: 'all 0.2s ease',
         }}
       />
-      
+
       {/* Edge label */}
-      {edge.label && (isHighlighted || isHovered) && (
+      {edge.label && (edgeState === 'hover' || edgeState === 'selected-hover' || edgeState === 'selected-between') && (
         <g>
           {/* Label background */}
           <rect
@@ -81,7 +82,7 @@ export const EdgeComponent: React.FC<EdgeProps> = ({
             rx="4"
             opacity={0.95}
           />
-          
+
           {/* Label text */}
           <text
             x={(sourcePosition.x + targetPosition.x) / 2}
