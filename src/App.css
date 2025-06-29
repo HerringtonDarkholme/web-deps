@@ -171,3 +171,20 @@
   display: block;
   color: inherit;
 }
+
+.tool-node:hover {
+  /* Add any direct hover styles here if needed, but animation is handled by class */
+}
+
+.tool-node.jiggle-on-hover:hover {
+  animation: jiggle 0.5s infinite;
+}
+
+@keyframes jiggle {
+  0%, 100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+}

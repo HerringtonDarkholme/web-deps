@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import type { ToolNode } from '../types';
+import styles from './ToolNode.module.css';
 
 interface ToolNodeProps {
   node: ToolNode;
@@ -33,21 +34,31 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
 
   return (
     <motion.div
-      className="tool-node"
+      className={styles.toolNode}
       id={`tool-node-${node.id}`}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      whileHover={{ scale: 1.05, y: -2 }}
+      whileHover={{
+        scale: 1.05,
+        y: -2,
+        rotate: [-1, 1],
+      }}
       whileTap={{ scale: 0.98 }}
       animate={{
         scale: isSelected ? 1.08 : 1,
         y: isSelected ? -4 : 0,
+        rotate: 0,
       }}
       transition={{
         type: "spring",
         stiffness: 300,
-        damping: 30
+        damping: 30,
+        rotate: {
+          repeat: Infinity,
+          repeatType: 'mirror',
+          duration: 0.2,
+        }
       }}
       style={{
         position: 'absolute',
@@ -64,7 +75,7 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
           ? `2px solid ${node.category.color}`
           : isHovered
             ? `1px solid ${node.category.color}80`
-            : `1px solid var(--border-primary)`,
+            : "1px solid var(--border-primary)",
         borderRadius: '12px',
         padding: '12px',
         cursor: 'pointer',
@@ -88,82 +99,46 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
       }}
     >
       {/* Logo */}
-      <div style={{
-        width: '44px',
-        height: '44px',
-        marginBottom: '10px',
-        background: 'rgba(250, 250, 250, 0.9)',
+      <div className={styles.logoContainer} style={{
         border: `2px solid ${node.category.color}`,
-        borderRadius: '50%',
-        flex: '0 0 auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '18px',
-        fontWeight: 'bold',
-        overflow: 'hidden',
-        color: '#ffffff'
       }}>
         {/* Fallback to first letter if logo fails to load */}
         <img
           src={logoSrc}
           alt={node.name}
-          style={{ width: '40px', height: '40px' }}
+          className={styles.logoImage}
           onError={(e) => {
-            (e.currentTarget as HTMLImageElement).style.display = 'none';
-            const nextElement = e.currentTarget.nextElementSibling;
-            if (nextElement && nextElement instanceof HTMLSpanElement) {
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            const nextElement = target.nextElementSibling as HTMLElement | null;
+            if (nextElement) {
               nextElement.style.display = 'block';
             }
           }}
         />
-        <span style={{ display: 'none' }}>
+        <span className={styles.logoFallback}>
           {node.name.charAt(0).toUpperCase()}
         </span>
       </div>
 
       {/* Tool Name and Connections */}
-      <div style={{
-        fontWeight: '600',
-        marginBottom: '2px',
-        textAlign: 'center',
-        lineHeight: '1.2',
-        fontSize: '12px',
-        color: 'var(--text-primary)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 6
-      }}>
+      <div className={styles.nameContainer}>
         <span>{node.name}</span>
-        <span style={{
-          background: (isHovered || isSelected) ? node.category.color : 'transparent',
-          color: (isHovered || isSelected) ? '#fff' : node.category.color,
-          border: `1.2px solid ${node.category.color}`,
-          borderRadius: '5px',
-          fontSize: '8px',
-          fontWeight: 700,
-          boxShadow: 'none',
-          letterSpacing: 0.2,
-          minWidth: 0,
-          height: '14px',
-          width: '16px',
-          lineHeight: '14px',
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          transition: 'background 0.2s, color 0.2s, border 0.2s',
-        }}>{connectionCount}</span>
+        <span
+          className={styles.connectionCount}
+          style={{
+            background: (isHovered || isSelected) ? node.category.color : 'transparent',
+            color: (isHovered || isSelected) ? '#fff' : node.category.color,
+            border: `1.2px solid ${node.category.color}`,
+          }}
+        >
+          {connectionCount}
+        </span>
       </div>
 
       {/* Category */}
-      <div style={{
-        fontSize: '9px',
-        textAlign: 'center',
+      <div className={styles.category} style={{
         color: node.category.color,
-        fontWeight: '500',
-        marginTop: 2
       }}>
         {node.category.name}
       </div>
