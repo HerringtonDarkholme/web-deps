@@ -29,7 +29,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
     translateY: 0
   });
 
-  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
   // Motion values for smooth interactions
@@ -47,19 +47,20 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   const effectiveSidebarWidth = isMobile ? 0 : SIDEBAR_WIDTH;
 
   // Pan and zoom handlers
-  const handleWheel = useCallback((event: WheelEvent) => {
-    event.preventDefault();
+  const handleWheel = useCallback((event: any) => {
+    if (typeof event.preventDefault === 'function') event.preventDefault();
 
     const container = containerRef.current;
     if (!container) return;
 
     const rect = container.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+    const mouseX = ('clientX' in event ? event.clientX : 0) - rect.left;
+    const mouseY = ('clientY' in event ? event.clientY : 0) - rect.top;
 
     // Calculate zoom
     const zoomIntensity = 0.1;
-    const zoomFactor = event.deltaY > 0 ? 1 - zoomIntensity : 1 + zoomIntensity;
+    const deltaY = 'deltaY' in event ? event.deltaY : 0;
+    const zoomFactor = deltaY > 0 ? 1 - zoomIntensity : 1 + zoomIntensity;
     const newScale = Math.max(minZoom, Math.min(maxZoom, viewport.scale * zoomFactor));
 
     // Calculate new translate to zoom towards mouse position
@@ -81,13 +82,13 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   // Pan handling
   const handlePanStart = useCallback(() => {
     if (containerRef.current) {
-      containerRef.current.style.cursor = 'grabbing';
+      (containerRef.current as HTMLDivElement).style.cursor = 'grabbing';
     }
   }, []);
 
   const handlePanEnd = useCallback(() => {
     if (containerRef.current) {
-      containerRef.current.style.cursor = 'grab';
+      (containerRef.current as HTMLDivElement).style.cursor = 'grab';
     }
   }, []);
 
@@ -119,8 +120,12 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
   // Handle node selection and highlighting
   const handleNodeClick = useCallback((nodeId: string) => {
-    setSelectedNode(selectedNode === nodeId ? null : nodeId);
-  }, [selectedNode]);
+    setSelectedNodes(prev =>
+      prev.includes(nodeId)
+        ? prev.filter(id => id !== nodeId)
+        : [...prev, nodeId]
+    );
+  }, []);
 
   const handleNodeHover = useCallback((nodeId: string | null) => {
     setHoveredNode(nodeId);
@@ -172,7 +177,8 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
   // Split edges into highlighted and non-highlighted
   const highlightedEdges = visibleEdges.filter(edge => {
-    const isHighlighted = (selectedNode && (edge.source === selectedNode || edge.target === selectedNode)) ||
+    const isHighlighted =
+      (selectedNodes.length > 0 && (selectedNodes.includes(edge.source) || selectedNodes.includes(edge.target))) ||
       (hoveredNode && (edge.source === hoveredNode || edge.target === hoveredNode));
     return isHighlighted;
   });
@@ -332,10 +338,10 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
               {/* Nodes layer */}
               <div className={styles.nodeLayer} style={{ position: 'relative', zIndex: 2 }}>
                 {visibleNodes.map(node => {
-                  const isSelected = selectedNode === node.id;
+                  const isSelected = selectedNodes.includes(node.id);
                   const isHovered = hoveredNode === node.id;
-                  const isConnected = selectedNode ?
-                    getConnectedNodes(selectedNode).includes(node.id) : false;
+                  // A node is connected if any selected node is connected to it
+                  const isConnected = selectedNodes.some(selId => getConnectedNodes(selId).includes(node.id));
                   // Count dependencies (outgoing) and dependees (incoming)
                   const dependencyCount = edges.filter(e => e.source === node.id).length;
                   const dependeeCount = edges.filter(e => e.target === node.id).length;
@@ -364,14 +370,15 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                 style={{ position: 'absolute', top: 0, left: 0, zIndex: 3, pointerEvents: 'none' }}
               >
                 {highlightedEdges.map(edge => {
-                  const isHighlighted = (selectedNode && (edge.source === selectedNode || edge.target === selectedNode));
-                  const isHovered = (hoveredNode && (edge.source === hoveredNode || edge.target === hoveredNode));
+                  const isHighlighted =
+                    (selectedNodes.length > 0 && (selectedNodes.includes(edge.source) || selectedNodes.includes(edge.target))) ||
+                    (hoveredNode && (edge.source === hoveredNode || edge.target === hoveredNode));
                   return (
                     <EdgeComponent
                       key={edge.id}
                       edge={edge}
                       isHighlighted={!!isHighlighted}
-                      isHovered={!!isHovered}
+                      isHovered={!!isHighlighted}
                     />
                   );
                 })}
