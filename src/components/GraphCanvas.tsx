@@ -217,6 +217,21 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   // Default sidebar content when no tool is hovered
   const showDefaultSidebar = !hoveredTool;
 
+  const resetViewport = useCallback(() => {
+    const visibleWidth = width - effectiveSidebarWidth;
+    const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
+      width: visibleWidth,
+      height,
+      canvasWidth: 2000,
+      canvasHeight: 1400,
+      initialScale: 0.5
+    });
+    setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
+    scale.set(initialScale);
+    x.set(centerX);
+    y.set(centerY);
+  }, [width, height, effectiveSidebarWidth, scale, x, y]);
+
   return (
     <>
       {/* Sidebar always visible */}
@@ -228,6 +243,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
         showDefault={showDefaultSidebar}
         focusMode={focusMode}
         onFocusModeChange={setFocusMode}
+        resetViewport={resetViewport}
       />
       <div
         ref={containerRef}
@@ -267,20 +283,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
             </button>
             <button
               className={styles.resetButton}
-              onClick={() => {
-                const visibleWidth = width - effectiveSidebarWidth;
-                const { scale: initialScale, translateX: centerX, translateY: centerY } = calculateCenteredViewport({
-                  width: visibleWidth,
-                  height,
-                  canvasWidth: 2000,
-                  canvasHeight: 1400,
-                  initialScale: 0.5
-                });
-                setViewport({ scale: initialScale, translateX: centerX, translateY: centerY });
-                scale.set(initialScale);
-                x.set(centerX);
-                y.set(centerY);
-              }}
+              onClick={resetViewport}
             >
               Reset
             </button>

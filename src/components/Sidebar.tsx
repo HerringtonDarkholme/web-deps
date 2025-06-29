@@ -10,9 +10,10 @@ interface SidebarProps {
   showDefault?: boolean;
   focusMode: FocusMode;
   onFocusModeChange: (mode: FocusMode) => void;
+  resetViewport: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, selectedNodes, showDefault, focusMode, onFocusModeChange }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, selectedNodes, showDefault, focusMode, onFocusModeChange, resetViewport }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isHandleHovered, setIsHandleHovered] = useState(false);
 
@@ -91,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, selectedNo
   ];
 
   // Helper to get the graph container element
-  function getGraphContainer() {
+  function getGraphContainer(): HTMLElement | null {
     // Use a static id for the main graph container
     return document.getElementById('graph-canvas-container');
   }
@@ -112,7 +113,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, selectedNo
   }
 
   // Copy canvas to clipboard handler
-  async function handleCopyCanvasToClipboard() {
+  async function handleCopyCanvasToClipboard(resetViewport: () => void) {
+    // Reset viewport to default position before capturing
+    resetViewport();
+
+    // Give the viewport time to transition to the new position
+    await new Promise(resolve => setTimeout(resolve, 300));
+
     const container = getGraphContainer();
     if (!container) {
       alert('Could not find the graph canvas to capture.');
@@ -200,7 +207,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ tool, edges, nodes, selectedNo
               </button>
               <button
                 type="button"
-                onClick={handleCopyCanvasToClipboard}
+                onClick={() => handleCopyCanvasToClipboard(resetViewport)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

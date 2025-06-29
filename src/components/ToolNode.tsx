@@ -82,7 +82,7 @@ export const ToolNodeComponent: React.FC<ToolNodeProps> = ({
         fontWeight: '500',
         filter: blurOut ? 'blur(2.5px) grayscale(0.7)' : undefined,
         opacity: blurOut ? 0.35 : (isConnected ? 1 : (isSelected ? 1 : 0.85)),
-        backdropFilter: 'blur(10px)',
+        backdropFilter: 'blur(15px)',
         userSelect: 'none',
         overflow: 'visible'
       }}
