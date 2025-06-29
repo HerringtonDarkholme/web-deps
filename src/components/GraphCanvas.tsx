@@ -179,6 +179,18 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
     return visibleNodes.includes(sourceNode) || visibleNodes.includes(targetNode);
   });
 
+  // Split edges for layered rendering
+  const hoveredEdgeIds = new Set<string>();
+  if (hoveredNode) {
+    edges.forEach(edge => {
+      if (edge.source === hoveredNode || edge.target === hoveredNode) {
+        hoveredEdgeIds.add(edge.id);
+      }
+    });
+  }
+  const hoveredEdges = visibleEdges.filter(edge => hoveredEdgeIds.has(edge.id));
+  const otherEdges = visibleEdges.filter(edge => !hoveredEdgeIds.has(edge.id));
+
   // Center the graph on initial load, accounting for sidebar on desktop
   useEffect(() => {
     if (viewport.translateX === 0 && viewport.translateY === 0) {
@@ -201,7 +213,6 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
   // Find hovered node and its relationships
   const hoveredTool = nodes.find(n => n.id === hoveredNode) ?? null;
-  const hoveredEdges = hoveredTool ? edges.filter(e => e.source === hoveredTool.id || e.target === hoveredTool.id) : [];
 
   // Default sidebar content when no tool is hovered
   const showDefaultSidebar = !hoveredTool;
@@ -297,7 +308,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                 willChange: 'opacity'
               }}
             >
-              {/* SVG for all edges (below nodes) */}
+              {/* SVG for non-hovered edges (below nodes) */}
               <svg
                 ref={svgRef}
                 className={styles.edgeLayer}
@@ -320,19 +331,10 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                     />
                   </marker>
                 </defs>
-                {visibleEdges.map(edge => {
+                {otherEdges.map(edge => {
                   const sourceSelected = selectedNodes.includes(edge.source);
                   const targetSelected = selectedNodes.includes(edge.target);
-                  const sourceHovered = hoveredNode === edge.source;
-                  const targetHovered = hoveredNode === edge.target;
-                  let edgeState: 'default' | 'hover' | 'selected-hover' | 'selected-between' = 'default';
-                  if ((sourceHovered || targetHovered) && (sourceSelected || targetSelected)) {
-                    edgeState = 'selected-hover';
-                  } else if (sourceHovered || targetHovered) {
-                    edgeState = 'hover';
-                  } else if (sourceSelected && targetSelected) {
-                    edgeState = 'selected-between';
-                  }
+                  const edgeState = (sourceSelected && targetSelected) ? 'selected-between' : 'default';
                   return (
                     <EdgeComponent
                       key={edge.id}
@@ -372,6 +374,27 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                   );
                 })}
               </div>
+
+              {/* SVG for hovered edges (above nodes) */}
+              <svg
+                className={styles.edgeLayer}
+                width={2000}
+                height={1400}
+                style={{ position: 'absolute', top: 0, left: 0, zIndex: 3, pointerEvents: 'none' }}
+              >
+                {hoveredEdges.map(edge => {
+                  const sourceSelected = selectedNodes.includes(edge.source);
+                  const targetSelected = selectedNodes.includes(edge.target);
+                  const edgeState = (sourceSelected || targetSelected) ? 'selected-hover' : 'hover';
+                  return (
+                    <EdgeComponent
+                      key={edge.id}
+                      edge={edge}
+                      edgeState={edgeState}
+                    />
+                  );
+                })}
+              </svg>
             </motion.div>
           </motion.div>
         </div>
